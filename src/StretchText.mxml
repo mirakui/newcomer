@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mx:Text xmlns:mx="http://www.adobe.com/2006/mxml"
+ fontSize="100" textAlign="left" fontWeight="bold" scaleX="{scale}" scaleY="{scale}"
+  paddingLeft="0" paddingRight="0">
+	<mx:Script><![CDATA[
+import flash.events.Event;
+	[Bindable] protected var scale:Number = 1.0;
+	protected var padding:Number = 10;
+	/*
+	override protected function createChildren():void 
+	{
+		//super.createChildren();
+		//addEventListener(Event.RESIZE, stretch);
+	}
+	*/
+	public function stretch(event:Event = null):void
+	{
+		//scale = 1.0;
+		trace("textWidth = " + unscaledWidth);
+		trace("parent.width = " + parent.width);
+		scale = Math.min( parent.width / (unscaledWidth+padding), parent.height / (unscaledHeight+padding) );
+		trace("scale = " + scale);
+	}
+	
+	public function setText(text:String):void
+	{
+		trace("t-width before setText = " + textWidth);
+		trace("u-width before setText = " + unscaledWidth);
+		trace("width before setText = " + width);
+		this.text = text;
+		this.stretch();
+		trace("t-width after setText = " + textWidth);
+		trace("u-width after setText = " + unscaledWidth);
+		trace("width after setText = " + width);
+	}
+	
+	]]></mx:Script>
+</mx:Text>

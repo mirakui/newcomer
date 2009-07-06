@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:my="*"
+ backgroundColor="#FFFFFF" initialize="init()" creationComplete="onCreationComplete()"
+ horizontalScrollPolicy="off" verticalScrollPolicy="off" horizontalAlign="left"
+ paddingLeft="0" paddingRight="0">
+	<mx:Button id="btnStart" label="start" click="onStart()" />
+	<mx:Button id="btnNext" label="next" click="onNext()" />
+	<mx:Zoom id="zoom" zoomHeightFrom="0.1" zoomWidthFrom="0.1" zoomHeightTo="100" zoomWidthTo="100" />
+	<my:TransitionTextLayer id="textLayer" width="100%" height="90%" />
+	<mx:Script><![CDATA[
+import mx.controls.Label;
+	private var questions:Array = [ "名前は？", "あいう\nかきくけこさしすせそ\nたちつてと", "こんに\nちは" ];
+	private var phase:int = 0;
+
+	private function init():void
+	{
+	}
+	
+	private function onCreationComplete():void
+	{
+		fetch();
+	}
+	
+	private function onNext():void
+	{
+		//textLayer.stretch();
+		textLayer.transit();
+		fetch();
+	}
+	
+	private function fetch():void {
+		textLayer.setNextText(questions[phase]);
+		phase = (phase + 1) % questions.length;
+	}
+	
+	private function onStart():void
+	{
+		textLayer.stretch();
+	}
+	]]></mx:Script>
+</mx:Application>

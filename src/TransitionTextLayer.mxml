@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:my="*"
+ horizontalScrollPolicy="off" verticalScrollPolicy="off"
+ creationComplete="onCreationComplete()"
+ initialize="init()">
+	<mx:Script><![CDATA[
+	]]></mx:Script>
+	<my:StretchText id="primary" text="" />
+	<my:StretchText id="secondary" text="" x="{width}" />
+	<mx:Move id="primaryMove" target="{primary}" xTo="{-width}"
+	 effectStart="onEffectStart('primary')" effectEnd="onEffectEnd('primary')" />
+	<mx:Move id="secondaryMove" target="{secondary}" xTo="0"
+	 effectStart="onEffectStart('secondary')" effectEnd="onEffectEnd('secondary')" />
+	<mx:Script><![CDATA[
+import mx.controls.Text;
+import mx.effects.Move;
+import mx.effects.Zoom;
+
+	private var effectPlaying:Object = { primary: false, secondary: false };
+	/*
+	override protected function createChildren():void 
+	{
+		//super.createChildren();
+		trace("createChildren");
+	}
+	*/
+	private function onCreationComplete():void
+	{		
+	}
+	
+	private function onEffectStart(name:String):void
+	{
+		effectPlaying[name] = true;
+		if (primaryMove.isPlaying || secondaryMove.isPlaying) {
+		}
+	}
+	
+	private function onEffectEnd(name:String):void
+	{
+		effectPlaying[name] = false;
+		if (!primaryMove.isPlaying && !secondaryMove.isPlaying) {
+			swapText();
+			secondary.x = width;
+			//stretch();
+		}
+	}
+	
+	public function init():void
+	{
+		//secondary.y = 0;
+		/*
+		primary.stretch();
+		var move:Move = new Move(primary);
+		move.xTo = width;
+		move.play();
+		*/
+	}
+	
+	public function setNextText(text:String):void
+	{
+		secondary.text = text;
+		validateNow();
+		secondary.stretch();
+		//secondary.setText(text);
+		//validateNow();
+		//secondary.text = text;
+		//trace("secondary.unscaledWidth = " + secondary.unscaledWidth);
+	}
+	
+	public function stretch():void
+	{
+		primary.stretch();
+		secondary.stretch();
+	}
+	
+	public function transit():void
+	{
+		secondary.stretch();
+		primaryMove.play();
+		secondaryMove.play();
+		
+	}
+	
+	private function swapText():void
+	{
+		var buf:StretchText = primary;
+		primary = secondary;
+		secondary = buf;
+	}
+	
+	]]></mx:Script>
+</mx:Canvas>
