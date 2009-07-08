@@ -3,10 +3,14 @@
  backgroundColor="#FFFFFF" initialize="init()" creationComplete="onCreationComplete()"
  horizontalScrollPolicy="off" verticalScrollPolicy="off" horizontalAlign="left"
  paddingLeft="0" paddingRight="0">
+	<mx:SoundEffect id="seBgm" source="../sound/loop01.mp3" useDuration="false" target="{this}" />
+	<mx:SoundEffect id="seRing" source="../sound/ring.mp3" useDuration="false" target="{this}" />
+	<mx:SoundEffect id="seGong" source="../sound/gong.mp3" useDuration="false" target="{this}" />
 	<mx:Button id="btnStart" label="start" click="onStart()" />
 	<mx:Button id="btnNext" label="next" click="onNext()" />
-	<mx:Zoom id="zoom" zoomHeightFrom="0.1" zoomWidthFrom="0.1" zoomHeightTo="100" zoomWidthTo="100" />
+	<mx:Button id="btnPay" label="play" />
 	<my:TransitionTextLayer id="textLayer" width="100%" height="90%" />
+	<my:TimerBar id="timerBar" width="100%" trackHeight="30" />
 	<mx:Script><![CDATA[
 import mx.controls.Label;
 	private var questions:Array = [ "名前は？", "あいう\nかきくけこさしすせそ\nたちつてと", "こんに\nちは" ];
@@ -18,23 +22,29 @@ import mx.controls.Label;
 	
 	private function onCreationComplete():void
 	{
+		trace("bgm.play");
+		seBgm.play();
 		fetch();
 	}
 	
 	private function onNext():void
 	{
+		seRing.play();
 		//textLayer.stretch();
 		textLayer.transit();
 		fetch();
 	}
 	
-	private function fetch():void {
+	private function fetch():void
+	{
 		textLayer.setNextText(questions[phase]);
 		phase = (phase + 1) % questions.length;
 	}
 	
 	private function onStart():void
 	{
+		timerBar.start();
+		seGong.play();
 		textLayer.stretch();
 	}
 	]]></mx:Script>
