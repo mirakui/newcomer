@@ -134,7 +134,10 @@ import mx.events.ResizeEvent;
 	{
 		textLayer.reset();
 		shutterLayer.hide();
+		shutterLayer.playerName = event.key;
 		questionManager.setCurrentKey(event.key);
+		menuPanel.select(event.key);
+		timerBar.stop();
 	}
 	
 	]]></mx:Script>

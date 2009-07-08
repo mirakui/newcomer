@@ -45,6 +45,8 @@ import mx.controls.Label;
 				vbox.setStyle("verticalGap", 0);
 				var btn:Button = new Button();
 				btn.label = key;
+				btn.setStyle("paddingLeft", 0);
+				btn.setStyle("paddingRight", 0);
 				btn.addEventListener(MouseEvent.CLICK, buildClickHandler(key));
 				vbox.addChild(btn);
 				var lbl:Label = new Label();
@@ -76,6 +78,18 @@ import mx.controls.Label;
 			var hit:Boolean = getRect(stage).contains(this.stage.mouseX, this.stage.mouseY);
 			setVisible(hit);
 			return hit;
+		}
+		
+		public function select(key:String):void
+		{
+			for each (var k:String in questionManager.getQuestions().getKeys()) {
+				if (key == k) {
+					labels[k].setStyle("color", "#CC0000");
+				}
+				else {
+					labels[k].setStyle("color", "#000000");
+				}
+			}
 		}
 		
 	]]></mx:Script>

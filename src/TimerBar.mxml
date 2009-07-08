@@ -29,6 +29,8 @@
 	
 	public function stop():void
 	{
+		timerProgress = minimum;
+		setProgress(timerProgress, maximum);
 		timer.stop();
 	}
 	

@@ -41,14 +41,18 @@
 		
 		public function show():void
 		{
-			setVisible(true);
-			stretch();
-			shutterMove.play([this], false);
+			if (y < 0) {
+				setVisible(true);
+				stretch();
+				shutterMove.play([this], false);
+			}
 		}
 		
 		public function hide():void
 		{
-			shutterMove.play([this], true);
+			if (y>=0) {
+				shutterMove.play([this], true);
+			}
 		}
 		
 	]]></mx:Script>
