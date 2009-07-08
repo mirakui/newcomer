@@ -5,7 +5,7 @@
  initialize="init()">
 	<mx:Script><![CDATA[
 	]]></mx:Script>
-	<my:StretchText id="primary" text="" />
+	<my:StretchText id="primary" text="Ready?" />
 	<my:StretchText id="secondary" text="" x="{width}" />
 	<mx:Move id="primaryMove" target="{primary}" xTo="{-width}"
 	 effectStart="onEffectStart('primary')" effectEnd="onEffectEnd('primary')" />
@@ -24,6 +24,13 @@ import mx.effects.Zoom;
 		trace("createChildren");
 	}
 	*/
+	
+	public function reset():void
+	{
+		primary.text = "Ready?";
+		stretch();
+	}
+	
 	private function onCreationComplete():void
 	{		
 	}
@@ -41,7 +48,6 @@ import mx.effects.Zoom;
 		if (!primaryMove.isPlaying && !secondaryMove.isPlaying) {
 			swapText();
 			secondary.x = width;
-			//stretch();
 		}
 	}
 	

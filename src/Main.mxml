@@ -1,51 +1,141 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:my="*"
- backgroundColor="#FFFFFF" initialize="init()" creationComplete="onCreationComplete()"
+ backgroundColor="#FFFFFF"
+ initialize="init()"
+ creationComplete="onCreationComplete()"
+ click="trace('click')"
+ focusOut="setFocus()"
+ keyDown="onKeyDown(event)"
+ mouseMove="onMouseMove(event)"
+ resize="onResize(event)"
  horizontalScrollPolicy="off" verticalScrollPolicy="off" horizontalAlign="left"
- paddingLeft="0" paddingRight="0">
-	<mx:SoundEffect id="seBgm" source="../sound/loop01.mp3" useDuration="false" target="{this}" />
+ paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0">
+	<mx:SoundEffect id="seBgm" source="../sound/loop01.mp3" useDuration="false" target="{this}" loops="1000" />
 	<mx:SoundEffect id="seRing" source="../sound/ring.mp3" useDuration="false" target="{this}" />
 	<mx:SoundEffect id="seGong" source="../sound/gong.mp3" useDuration="false" target="{this}" />
-	<mx:Button id="btnStart" label="start" click="onStart()" />
-	<mx:Button id="btnNext" label="next" click="onNext()" />
-	<mx:Button id="btnPay" label="play" />
-	<my:TransitionTextLayer id="textLayer" width="100%" height="90%" />
-	<my:TimerBar id="timerBar" width="100%" trackHeight="30" />
+	<mx:Canvas width="100%" height="100%">
+		<mx:Box width="100%" height="100%">
+			<mx:Spacer height="30" />
+			<my:TransitionTextLayer id="textLayer" width="100%" height="100%" />
+			<my:TimerBar id="timerBar" width="100%" trackHeight="30" onMinimum="onFinished()" />
+		</mx:Box>
+		<my:ShutterLayer id="shutterLayer" />
+		<my:MenuPanel id="menuPanel" width="100%" buttonClick="onMenuButtonClick(event)" />
+	</mx:Canvas>
 	<mx:Script><![CDATA[
+import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
+import flash.ui.Mouse;
 import mx.controls.Label;
-	private var questions:Array = [ "名前は？", "あいう\nかきくけこさしすせそ\nたちつてと", "こんに\nちは" ];
+import mx.events.ResizeEvent;
 	private var phase:int = 0;
+	private var questionManager:QuestionManager = new QuestionManager(new NewcomerQuestions());
 
 	private function init():void
 	{
+		setFocus();
+		
+		menuPanel.setQuestionManager(questionManager);
+		// TODO
+		questionManager.setCurrentKey("test1");
+		shutterLayer.playerName = questionManager.getCurrentKey();
+	}
+	
+	private function onMouseMove(event:MouseEvent):void
+	{
+		menuPanel.hit();
+	}
+	
+	private function onKeyDown(event:KeyboardEvent):void
+	{
+		trace("keyCode = " + event.keyCode);
+		switch (event.keyCode) {
+		case 32:
+			onNext(true);
+			break;
+		case 39:
+			onNext(false);
+			break;
+		case 13:
+			break;
+		case 82: // r
+			textLayer.stretch();
+			break;
+		case 189: // -
+			questionManager.setCurrentScore(questionManager.getCurrentScore() - 1);
+			menuPanel.updateLabels();
+			break;
+		case 187: // +
+			questionManager.setCurrentScore(questionManager.getCurrentScore() + 1);
+			menuPanel.updateLabels();
+			break;
+		}
+	}
+	
+	private function onResize(event:ResizeEvent):void
+	{
+		if (textLayer != null) {
+			textLayer.stretch();
+		}
 	}
 	
 	private function onCreationComplete():void
 	{
-		trace("bgm.play");
 		seBgm.play();
-		fetch();
+		//fetch();
 	}
 	
-	private function onNext():void
+	private function onNext(isCorrect:Boolean):void
 	{
-		seRing.play();
-		//textLayer.stretch();
+		if (questionManager.isLast()) {
+			trace("LAST!!");
+			return;
+		}
+		if (isCorrect) {
+			if (questionManager.getPhase() == 0) {
+				questionManager.setCurrentScore(0);
+				menuPanel.updateLabels();
+				timerBar.start();
+			}
+			else {
+				seRing.play();
+				questionManager.incrementCurrentScore();
+				menuPanel.updateLabels();
+			}
+		}
+		else {
+			// TODO beep
+		}
 		textLayer.transit();
 		fetch();
 	}
 	
 	private function fetch():void
 	{
-		textLayer.setNextText(questions[phase]);
-		phase = (phase + 1) % questions.length;
+		var q:String = questionManager.fetch();
+		if (q == null) {
+			textLayer.setNextText("");
+			onFinished();
+		}
+		else {
+			textLayer.setNextText(q);
+		}
 	}
 	
-	private function onStart():void
+	private function onFinished():void
 	{
-		timerBar.start();
+		// 問題おわり！！
 		seGong.play();
-		textLayer.stretch();
+		shutterLayer.score = questionManager.getCurrentScore();
+		shutterLayer.show();
 	}
+	
+	private function onMenuButtonClick(event:MenuPanelEvent):void
+	{
+		textLayer.reset();
+		shutterLayer.hide();
+		questionManager.setCurrentKey(event.key);
+	}
+	
 	]]></mx:Script>
 </mx:Application>

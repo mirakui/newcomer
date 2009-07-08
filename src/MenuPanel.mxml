@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+ backgroundAlpha="0.5" backgroundColor="white"
+ width="100%"
+ visible="false"
+ creationComplete="onCreate()"
+>
+	<mx:Metadata>
+		[Event(name="buttonClick", type="MenuPanelEvent")]
+	</mx:Metadata>
+	<mx:VBox horizontalAlign="center" verticalGap="0">
+		<mx:Button label="成田" />
+		<mx:Label text="99" fontSize="20" />
+	</mx:VBox>
+	<mx:Script><![CDATA[
+import flash.events.Event;
+import flash.events.MouseEvent;
+import mx.containers.VBox;
+import mx.controls.Button;
+import mx.controls.Label;
+		private var questionManager:QuestionManager;
+		private var labels:Object = { };
+		
+		public function onCreate():void
+		{
+			/*
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, function(event:MouseEvent):void {
+				if (getRect(stage).contains(this.stage.mouseX, this.stage.mouseY)) {
+					setVisible(true);
+				}
+			});
+			*/
+		}
+		
+		public function setQuestionManager(questionManager:QuestionManager):void
+		{
+			this.questionManager = questionManager;
+			removeAllChildren();
+			var keys:Array = this.questionManager.getQuestions().getKeys();
+			for each (var key:String in keys) 
+			{
+				var vbox:VBox = new VBox();
+				addChild(vbox);
+				vbox.setStyle("horizontalAlign", "center");
+				vbox.setStyle("verticalGap", 0);
+				var btn:Button = new Button();
+				btn.label = key;
+				btn.addEventListener(MouseEvent.CLICK, buildClickHandler(key));
+				vbox.addChild(btn);
+				var lbl:Label = new Label();
+				vbox.addChild(lbl);
+				lbl.setStyle("fontSize", 20);
+				lbl.setStyle("textAlign", "center");
+				lbl.text = questionManager.getScore(key).toString();
+				labels[key] = lbl;
+			}
+		}
+		
+		public function buildClickHandler(key:String):Function {
+			return function(event:MouseEvent):void {
+				dispatchEvent(new MenuPanelEvent(MenuPanelEvent.BUTTON_CLICK, key));
+			}
+		}
+		
+		public function updateLabels():void
+		{
+			var keys:Array = this.questionManager.getQuestions().getKeys();
+			for each (var key:String in keys) 
+			{
+				labels[key].text = questionManager.getScore(key).toString();
+			}
+		}
+		
+		public function hit():Boolean
+		{
+			var hit:Boolean = getRect(stage).contains(this.stage.mouseX, this.stage.mouseY);
+			setVisible(hit);
+			return hit;
+		}
+		
+	]]></mx:Script>
+</mx:HBox>
