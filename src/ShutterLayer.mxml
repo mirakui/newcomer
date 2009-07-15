@@ -21,7 +21,6 @@
 		[Bindable] private var _score:int = 0;
 		public function get score():int { return _score; }
 		public function set score(x:int):void { _score = x; }
-		public var isShow:Boolean = true;
 		
 		private function init():void
 		{
@@ -44,7 +43,6 @@
 		public function show():void
 		{
 			if (y < 0) {
-				isShow = true;
 				setVisible(true);
 				stretch();
 				shutterMove.play([this], false);
@@ -54,9 +52,13 @@
 		public function hide():void
 		{
 			if (y >= 0) {
-				isShow = false;
 				shutterMove.play([this], true);
 			}
+		}
+		
+		public function isShow():Boolean
+		{
+			return y > -height;
 		}
 		
 	]]></mx:Script>

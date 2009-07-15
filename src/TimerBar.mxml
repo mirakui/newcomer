@@ -11,7 +11,7 @@
 	import flash.utils.Timer;
 	private var timer:Timer = new Timer(10);
 	private var timerProgress:Number = 0;
-	[Bindable] private var timerSecond:Number = 5;
+	[Bindable] private var timerSecond:Number = 30;
 	
 	public function init():void
 	{

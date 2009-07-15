@@ -106,7 +106,7 @@ import mx.events.ResizeEvent;
 				timerBar.start();
 			}
 			else {
-				if (shutterLayer.isShow) {
+				if (shutterLayer.isShow()) {
 					return;
 				}
 				seRing.play();
