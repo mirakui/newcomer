@@ -11,7 +11,7 @@
 	import flash.utils.Timer;
 	private var timer:Timer = new Timer(10);
 	private var timerProgress:Number = 0;
-	[Bindable] private var timerSecond:Number = 30;
+	[Bindable] private var timerSecond:Number = 5;
 	
 	public function init():void
 	{
@@ -23,7 +23,6 @@
 	{
 		timerProgress = maximum
 		setProgress(timerProgress, maximum);
-		//trace("timerProgress = " + maximum);
 		timer.start();
 	}
 	
@@ -38,18 +37,15 @@
 	{
 		timer.addEventListener(TimerEvent.TIMER, function(event:TimerEvent):void {
 			timerProgress -= ((timer.delay / 1000.0) / timerSecond) * maximum;
-			//trace("onProgress " +timerProgress);
 			if (timerProgress > maximum) {
 				timerProgress = maximum;
 				timer.stop();
 				dispatchEvent(new TimerBarEvent(TimerBarEvent.MAXIMUM));
-				trace("dispatch! max");
 			}
 			else if (timerProgress < minimum) {
 				timerProgress = minimum;
 				timer.stop();
 				dispatchEvent(new TimerBarEvent(TimerBarEvent.MINIMUM));
-				trace("dispatch! min");
 			}
 			setProgress(timerProgress, maximum);
 		});

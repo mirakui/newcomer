@@ -22,20 +22,14 @@
 		
 		public function init():void
 		{
-			setStyle("fontSize", 100);
-			setStyle("textAlign", "center");
-			setStyle("fontWeight", "bold");
-			//truncateToFit = false;
-			//textField
 		}
 		
-		public function stretch(event:Event=null):void
+		public function stretch(targetWidth:Number = 0):void
 		{
 			scaleX = scaleY = 1;
 			validateSize();
 			validateNow();
-			//var scale:Number = Math.min( (parent.width) / (width+marginX) , (parent.height) / (height+marginY) );
-			var scale:Number = parent.width / textWidth;
+			var scale:Number = (targetWidth>0 ? targetWidth : parent.width) / textWidth;
 			scaleX = scale;
 			scaleY = scale;
 			height = parent.height;

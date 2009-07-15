@@ -9,14 +9,14 @@
 	{
 		private var questions:Questions;
 		private var phase:int = 0;
-		private var key:String;
+		private var key:String = null;
 		private var scores:Object = {};
 		
 		public function QuestionManager(questions:Questions) 
 		{
 			this.questions = questions;
 			var keys:Array = questions.getKeys();
-			setCurrentKey(keys[0]);
+			//setCurrentKey(keys[0]);
 			keys.forEach(function(k:String, v:Object, i:Object):void {
 				setScore(k, 0);
 			});
@@ -70,7 +70,6 @@
 			}
 			var q:String = this.questions.getQuestion(key, phase);
 			phase++;
-			trace("fetched = " + q);
 			return q;
 		}
 		
@@ -81,7 +80,9 @@
 		
 		public function isLast():Boolean
 		{
-			if (phase == questions.length(key)) {
+			trace("isLast: phase = " + phase);
+			trace("isLast: length = " + questions.length(key));
+			if (questions.length(key)>0 && phase == questions.length(key)) {
 				return true;
 			}
 			return false;

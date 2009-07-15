@@ -73,10 +73,10 @@ import mx.effects.Zoom;
 		//trace("secondary.unscaledWidth = " + secondary.unscaledWidth);
 	}
 	
-	public function stretch():void
+	public function stretch(targetWidth:Number=0, targetHeight:Number=0):void
 	{
-		primary.stretch();
-		secondary.stretch();
+		primary.stretch(targetWidth, targetHeight);
+		secondary.stretch(targetWidth, targetHeight);
 	}
 	
 	public function transit():void

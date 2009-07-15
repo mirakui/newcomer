@@ -21,13 +21,11 @@
 		}
 		public static function arrayConcat(left:Array, right:Array):Array
 		{
-			trace("arrayConcat");
 			if (right==null) {
 				return left;
 			}
 			for (var r:* in right) 
 			{
-				trace("right[r] = " + right[r]);
 				left.push(right[r]);
 			}
 			return left;

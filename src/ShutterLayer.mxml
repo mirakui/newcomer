@@ -21,6 +21,7 @@
 		[Bindable] private var _score:int = 0;
 		public function get score():int { return _score; }
 		public function set score(x:int):void { _score = x; }
+		public var isShow:Boolean = true;
 		
 		private function init():void
 		{
@@ -29,19 +30,21 @@
 		private function onCreate():void
 		{
 			y = -height;
-			trace('y = ' + y);
 			stretch();
 		}
 		
-		public function stretch():void
+		public function stretch(targetWidth:Number=0, targetHeight:Number=0):void
 		{
-			textName.stretch();
-			textScore.stretch();
+			width = parent.width;
+			validateNow();
+			textName.stretch(targetWidth, targetHeight);
+			textScore.stretch(targetWidth, targetHeight);
 		}
 		
 		public function show():void
 		{
 			if (y < 0) {
+				isShow = true;
 				setVisible(true);
 				stretch();
 				shutterMove.play([this], false);
@@ -50,7 +53,8 @@
 		
 		public function hide():void
 		{
-			if (y>=0) {
+			if (y >= 0) {
+				isShow = false;
 				shutterMove.play([this], true);
 			}
 		}

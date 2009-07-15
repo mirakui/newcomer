@@ -36,8 +36,6 @@ import mx.events.ResizeEvent;
 		setFocus();
 		
 		menuPanel.setQuestionManager(questionManager);
-		// TODO
-		questionManager.setCurrentKey("test1");
 		shutterLayer.playerName = questionManager.getCurrentKey();
 	}
 	
@@ -60,6 +58,9 @@ import mx.events.ResizeEvent;
 			break;
 		case 82: // r
 			textLayer.stretch();
+			shutterLayer.stretch();
+			trace("key = " + questionManager.getCurrentKey());
+			trace("qsize = " + questionManager.getQuestions().length(questionManager.getCurrentKey()));
 			break;
 		case 189: // -
 			questionManager.setCurrentScore(questionManager.getCurrentScore() - 1);
@@ -82,11 +83,18 @@ import mx.events.ResizeEvent;
 	private function onCreationComplete():void
 	{
 		seBgm.play();
-		//fetch();
 	}
 	
 	private function onNext(isCorrect:Boolean):void
 	{
+		if (questionManager.getCurrentKey() == null) {
+			trace("current key null");
+			return;
+		}
+		if (questionManager.getQuestions() == null) {
+			trace("question null");
+			return;
+		}
 		if (questionManager.isLast()) {
 			trace("LAST!!");
 			return;
@@ -98,6 +106,9 @@ import mx.events.ResizeEvent;
 				timerBar.start();
 			}
 			else {
+				if (shutterLayer.isShow) {
+					return;
+				}
 				seRing.play();
 				questionManager.incrementCurrentScore();
 				menuPanel.updateLabels();
@@ -135,6 +146,7 @@ import mx.events.ResizeEvent;
 		textLayer.reset();
 		shutterLayer.hide();
 		shutterLayer.playerName = event.key;
+		shutterLayer.stretch(width);
 		questionManager.setCurrentKey(event.key);
 		menuPanel.select(event.key);
 		timerBar.stop();
